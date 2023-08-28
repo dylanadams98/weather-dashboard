@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/assets/style.css' />
+    <script></script>
+    <title>Weather Dashboard</title>
+</head>
+
+<body class="row">
+
+    <header>
+        <h1>5-Day Weather Forecast</h1>
+    </header>
+
+    <div class="left">
+        <aside>
+            <h1>History:</h1>
+            <div class="search-section">
+                <input type="text" id="location" placeholder="Enter a location to search">
+                <button id="search">Search</button>
+                <div id="error"></div>
+            </div>
+            <hr />
+            <div class="recent-section" id="recent-section"></div>
+        </aside>
+    </div>
+
+    <div class="center"></div>
+    <content>
+        <div id="weather">
+            <div class="weather-icon">
+                <div class="weather-location" id="location-name">Enter a location</div>
+                <img src="assets/images/cloudy.png" alt="">
+            </div>
+            <div class="weather-info">
+                <div class="temperature">
+                    <span>Temperature:</span>
+                    <span id="temp_value">-</span>
+                </div>
+
+                <div class="wind">
+                    <span>Wind:</span>
+                    <span id="wind_value">-</span>
+                </div>
+
+                <div class="humidity">
+                    <span>Humidity:</span>
+                    <span id="humidity_value">-</span>
+                </div>
+
+                <div class="uv-index">
+                    <span>UV Index:</span>
+                    <span id="uv_value">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="forecast">
+            <h1>5-Day Forecast</h1>
+            <div id="forecast-days"></div>
+        </div>
+
+    </content>
+    </div>
+</body>
+<script src="/assets/script.js"></script>
+</html>
