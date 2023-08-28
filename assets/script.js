@@ -2,9 +2,8 @@ const WEATHER_API_BASE_URL = 'https://api.openweathermap.org';
 const WEATHER_API_KEY = 'f23ee9deb4e1a7450f3157c44ed020e1';
 const MAX_DAILY_FORECAST = 5;
 
-// create an array of searched locations
 
-const recentLocations = [];
+// create an array of searched locations
 
 const getLocation = () => {
 
@@ -55,7 +54,7 @@ const lookupLocation = (search) => {
             console.log(myData);
 
             // Get the Weather for the cached location
-            var apiUrl = `${WEATHER_API_BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid=${WEATHER_API_KEY}`;
+            var apiUrl = `${WEATHER_API_BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely,hourly&appid=${WEATHER_API_KEY}`;
             console.log(apiUrl);
             fetch(apiUrl)
                 .then(response => response.json())
@@ -77,11 +76,14 @@ const lookupLocation = (search) => {
 const displayCurrentWeather = (weatherData) => {
     const currentWeather = weatherData.current;
 
-    document.getElementById('temp_value').textContent = `${currentWeather.temp}`;
-    document.getElementById('wind_value').textContent = `${currentWeather.wind}`;
-    document.getElementById('humidity_value').textContent = `${currentWeather.humidity}`;
-    document.getElementById('uv_value').textContent = `${currentWeather.uv}`;
+    document.getElementById('icon').innerHTML = `<img src="https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png"/>`;
+
+    document.getElementById('temp_value').textContent = `${currentWeather.temp}°`;
+    document.getElementById('wind_value').textContent = `${currentWeather.wind_speed} MPH`;
+    document.getElementById('humidity_value').textContent = `${currentWeather.humidity} %`;
+    document.getElementById('uv_value').textContent = `${currentWeather.uvi}` ;
 }
+
 
 const displayWeatherForecast = (weatherData) => {
 
@@ -89,16 +91,18 @@ const displayWeatherForecast = (weatherData) => {
 
     document.getElementById('forecast').style.display = 'block';
 
-    const forecastList = document.getElementById('forecast_days');
+    const forecastList = document.getElementById('forecast-days');
     forecastList.innerHTML = '';
 
 for (let i = 0; i < MAX_DAILY_FORECAST; i++) {
 
     const dailyForecast = dailyData[i];
+    var icon = `<img src="https://openweathermap.org/img/wn/${dailyForecast.weather[0].icon}@2x.png"/>`;
     const day = new Date(dailyForecast.dt * 1000).toLocaleDateString('en-GB', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
-    const temp = `${dailyForecast.temp.day}%`;
+    const temp = `${dailyForecast.temp.day}°`;
     const humidity = `${dailyForecast.humidity}%`;
     const wind = `${dailyForecast.wind_speed} MPH`;
+    const uv = `${dailyForecast.uvi}`;
 
     const newForecast = document.createElement('div');
     newForecast.classList.add('forecast-day');
@@ -106,18 +110,26 @@ for (let i = 0; i < MAX_DAILY_FORECAST; i++) {
         <div class=day>
             <span>${day}</span>
          </div>
+
+         <div class="icon">
+             <span>${icon}</span>
+             </div>
          
          <div class=temperature>
             <span>${temp}</span>
          </div>
 
          <div class=wind>
-            <span>${wind}}</span>
+            <span>${wind}</span>
          </div>
 
          <div class=humidity>
-            <span>${humidity}}</span>
+            <span>${humidity}</span>
          </div>
+
+         <div class=uv-index>
+         <span>${uv}</span>
+      </div>
          </div>`;
          forecastList.appendChild(newForecast);
     }
@@ -126,7 +138,7 @@ for (let i = 0; i < MAX_DAILY_FORECAST; i++) {
 
  const getWeatherData = (lat, lon) => {
 
-    var apiUrl = `${WEATHER_API_BASE_URL}data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid=${WEATHER_API_KEY}`;
+    var apiUrl = `${WEATHER_API_BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely,hourly&appid=${WEATHER_API_KEY}`;
     console.log(apiUrl);
     fetch(apiUrl)
         .then(response => response.json())
@@ -151,6 +163,36 @@ const searchButton = document.getElementById('search');
 
 searchButton.addEventListener('click', getLocation);
 
+forecast.style.display = 'block';
 
-// Add an event handler for the search button
+var locationValue = document.getElementById('locationInput');
 
+localStorage.setItem('location', locationValue);
+
+var savedLocations = document.getElementById('saved-locations')
+
+var historyButton = document.createElement('button');
+historyButton.innerHtml = locationValue;
+savedLocations.appendChild(historyButton);
+
+var savedHistoryButtons = document.querySelectorAll("#saved-locations button");
+
+savedHistoryButtons.forEach(button => button.addEventListener('click', handleClick));
+
+function handleClick(event) {
+
+    var clickedHistoryButton = event.target;
+  var buttonContent = clickedHistoryButton.innerText;
+
+  console.log("History updated", buttonContent);
+
+  tellWeather(buttonContent);
+
+  event.preventDefault();
+}
+
+locationInput.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
+        getLocation();
+    }
+});
