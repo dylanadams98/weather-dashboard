@@ -8,9 +8,9 @@ I have not managed to get the local storage working but I would like to fix this
 
 One particularily challenging aspect about this project was implementing icons. yuvraaaj on GitHub provided some very helpful files and a step-by-step tutorial which I used to help get this implemented: https://github.com/yuvraaaj/openweathermap-api-icons
 
-The deployed code is accessible here: https://github.com/dylanadams98/web-api-quiz-project
+The deployed code is accessible here: https://github.com/dylanadams98/weather-dashboard
 
-The deployed page is accessible here: https://dylanadams98.github.io/web-api-quiz-project
+The deployed page is accessible here: https://dylanadams98.github.io/weather-dashboard
 
 ![Screenshot](assets/images/screenshot.png)
 
