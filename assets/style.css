@@ -28,7 +28,6 @@ input{
   
  header {
     text-align: center;
-    background-color: lightblue;
  }
 
  aside {
@@ -53,9 +52,15 @@ input{
 }
 
 .weather-info {
-   background-color: brown;
+   background-color: lightgrey;
    border-radius: 10px;
 margin-left: 300px;
 margin-right: 300px;
+
    padding: 10px;
+}
+
+#forecast-days{
+
+   margin-bottom: 50px;
 }

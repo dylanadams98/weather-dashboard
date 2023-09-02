@@ -116,19 +116,19 @@ for (let i = 0; i < MAX_DAILY_FORECAST; i++) {
              </div>
          
          <div class=temperature>
-            <span>${temp}</span>
+            <span>Temp: ${temp}</span>
          </div>
 
          <div class=wind>
-            <span>${wind}</span>
+            <span>Wind: ${wind}</span>
          </div>
 
          <div class=humidity>
-            <span>${humidity}</span>
+            <span>Humidity: ${humidity}</span>
          </div>
 
          <div class=uv-index>
-         <span>${uv}</span>
+         <span>UV Index: ${uv}</span>
       </div>
          </div>`;
          forecastList.appendChild(newForecast);
@@ -167,6 +167,8 @@ forecast.style.display = 'block';
 
 var locationValue = document.getElementById('locationInput');
 
+// Challenging local storage functionality that is not currently working.
+
 localStorage.setItem('location', locationValue);
 
 var savedLocations = document.getElementById('saved-locations')
@@ -175,7 +177,7 @@ var historyButton = document.createElement('button');
 historyButton.innerHtml = locationValue;
 savedLocations.appendChild(historyButton);
 
-var savedHistoryButtons = document.querySelectorAll("#saved-locations button");
+var savedHistoryButtons = document.querySelectorAll(".saved-locations button");
 
 savedHistoryButtons.forEach(button => button.addEventListener('click', handleClick));
 
