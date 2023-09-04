@@ -9,6 +9,8 @@ const getLocation = () => {
 
     const userLocation = locationInput.value;
 
+    saveToLocal();
+
     if (userLocation === '') {
         setLocationError.textContent = 'Please enter a location';
     } else {
@@ -69,7 +71,7 @@ const lookupLocation = (search) => {
                     displayWeatherForecast(data);
                 })
 
-                displayWeather(myData);
+            displayWeather(myData);
         })
 }
 
@@ -81,7 +83,7 @@ const displayCurrentWeather = (weatherData) => {
     document.getElementById('temp_value').textContent = `${currentWeather.temp}°`;
     document.getElementById('wind_value').textContent = `${currentWeather.wind_speed} MPH`;
     document.getElementById('humidity_value').textContent = `${currentWeather.humidity} %`;
-    document.getElementById('uv_value').textContent = `${currentWeather.uvi}` ;
+    document.getElementById('uv_value').textContent = `${currentWeather.uvi}`;
 }
 
 
@@ -94,19 +96,19 @@ const displayWeatherForecast = (weatherData) => {
     const forecastList = document.getElementById('forecast-days');
     forecastList.innerHTML = '';
 
-for (let i = 0; i < MAX_DAILY_FORECAST; i++) {
+    for (let i = 0; i < MAX_DAILY_FORECAST; i++) {
 
-    const dailyForecast = dailyData[i];
-    var icon = `<img src="https://openweathermap.org/img/wn/${dailyForecast.weather[0].icon}@2x.png"/>`;
-    const day = new Date(dailyForecast.dt * 1000).toLocaleDateString('en-GB', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
-    const temp = `${dailyForecast.temp.day}°`;
-    const humidity = `${dailyForecast.humidity}%`;
-    const wind = `${dailyForecast.wind_speed} MPH`;
-    const uv = `${dailyForecast.uvi}`;
+        const dailyForecast = dailyData[i];
+        var icon = `<img src="https://openweathermap.org/img/wn/${dailyForecast.weather[0].icon}@2x.png"/>`;
+        const day = new Date(dailyForecast.dt * 1000).toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        const temp = `${dailyForecast.temp.day}°`;
+        const humidity = `${dailyForecast.humidity}%`;
+        const wind = `${dailyForecast.wind_speed} MPH`;
+        const uv = `${dailyForecast.uvi}`;
 
-    const newForecast = document.createElement('div');
-    newForecast.classList.add('forecast-day');
-    newForecast.innerHTML = `<div class=weather-info">
+        const newForecast = document.createElement('div');
+        newForecast.classList.add('forecast-day');
+        newForecast.innerHTML = `<div class=weather-info">
         <div class=day>
             <span>${day}</span>
          </div>
@@ -131,12 +133,12 @@ for (let i = 0; i < MAX_DAILY_FORECAST; i++) {
          <span>UV Index: ${uv}</span>
       </div>
          </div>`;
-         forecastList.appendChild(newForecast);
+        forecastList.appendChild(newForecast);
     }
- }
+}
 
 
- const getWeatherData = (lat, lon) => {
+const getWeatherData = (lat, lon) => {
 
     var apiUrl = `${WEATHER_API_BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely,hourly&appid=${WEATHER_API_KEY}`;
     console.log(apiUrl);
@@ -149,7 +151,7 @@ for (let i = 0; i < MAX_DAILY_FORECAST; i++) {
             displayCurrentWeather(data);
 
             displayWeatherForecast(data);
-    })
+        })
 }
 
 const displayWeather = (weatherData) => {
@@ -163,35 +165,45 @@ const searchButton = document.getElementById('search');
 
 searchButton.addEventListener('click', getLocation);
 
-forecast.style.display = 'block';
+function saveToLocal() {
 
-var locationValue = document.getElementById('locationInput');
+    forecast.style.display = 'block';
 
-// Challenging local storage functionality that is not currently working.
+    var weatherHistory = JSON.parse(localStorage.getItem('location')) || [];
 
-localStorage.setItem('location', locationValue);
+    var locationValue = document.getElementById('location').value;
 
-var savedLocations = document.getElementById('saved-locations')
+    console.log(locationValue.value);
 
-var historyButton = document.createElement('button');
-historyButton.innerHtml = locationValue;
-savedLocations.appendChild(historyButton);
+    weatherHistory.push(locationValue);
 
-var savedHistoryButtons = document.querySelectorAll(".saved-locations button");
+    // Challenging local storage functionality that is not currently fully working.
 
-savedHistoryButtons.forEach(button => button.addEventListener('click', handleClick));
+    localStorage.setItem('location', JSON.stringify(weatherHistory));
+
+    var savedLocations = document.getElementById('saved-locations')
+
+    var historyButton = document.createElement('button');
+    historyButton.innerHtml = locationValue;
+    savedLocations.appendChild(historyButton);
+
+    var savedHistoryButtons = document.querySelectorAll(".saved-locations button");
+
+    savedHistoryButtons.forEach(button => button.addEventListener('click', handleClick));
+
+}
 
 function handleClick(event) {
 
     var clickedHistoryButton = event.target;
-  var buttonContent = clickedHistoryButton.innerText;
+    var buttonContent = clickedHistoryButton.innerText;
 
-  console.log("History updated", buttonContent);
+    console.log("History updated", buttonContent);
 
-  tellWeather(buttonContent);
-
-  event.preventDefault();
+    event.preventDefault();
 }
+
+
 
 locationInput.addEventListener('keyup', (event) => {
     if (event.key === 'Enter') {
